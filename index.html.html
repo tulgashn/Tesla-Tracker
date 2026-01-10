@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔋 Tesla Ladekosten Tracker</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        h1 { color: white; text-align: center; margin-bottom: 30px; font-size: 2.5em; }
+        .stats-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th { background: #667eea; color: white; font-weight: 600; }
+        tr:hover { background: #f5f5f5; }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+        button:hover { background: #5568d3; transform: translateY(-2px); }
+        .delete-btn { background: #e53935; }
+        .delete-btn:hover { background: #c62828; }
+        input, select {
+            padding: 10px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            font-size: 1em;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        .collapsible-header {
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            color: white;
+            margin-bottom: 0;
+            transition: all 0.3s ease;
+        }
+        .collapsible-header:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .collapsible-content {
+            max-height: 3000px;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            padding-top: 20px;
+        }
+        .collapsible-content.collapsed {
+            max-height: 0;
+            padding-top: 0;
+        }
+        .highlight { background: #fffde7; padding: 20px; border-radius: 10px; margin-bottom: 15px; }
+        .green { background: #e8f5e9; }
+        .red { background: #ffebee; }
+        .yellow { background: #fffde7; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔋 Tesla Ladekosten Tracker & Vergleichsrechner</h1>
+        
+        <!-- Kostenvergleich -->
+        <div class="stats-card">
+            <h2 style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 1.5em;">⚡</span> vs <span style="font-size: 1.5em;">⛽</span>
+                Kostenvergleich: Tesla vs. Benziner (8,5L/100km)
+            </h2>
+            <p style="margin-bottom: 15px; color: #666;">
+                Durchschnittlicher Super E10 Preis: <strong id="avgFuelPriceDisplay">1.65</strong> €/Liter 
+                (basierend auf <span id="monthCountDisplay">0</span> erfassten Monaten)
+            </p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fahrzeug</th>
+                        <th>kWh / Liter</th>
+                        <th>Kosten</th>
+                        <th>Gesamtkosten</th>
+                        <th>km</th>
+                        <th>€/km</th>
+                        <th>€/100km</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="green">
+                        <td><strong>⚡ Tesla</strong></td>
+                        <td id="compTeslaKwh">0</td>
+                        <td id="compTeslaPrice">0,000 €</td>
+                        <td id="compTeslaTotalCost">0,00 €</td>
+                        <td id="compKm" style="font-weight: bold;">0</td>
+                        <td id="compTeslaEuroKm">0,00 €</td>
+                        <td id="compTeslaEuro100Km">0,00 €</td>
+                    </tr>
+                    <tr class="red">
+                        <td><strong>⛽ Benziner 8,5L</strong></td>
+                        <td id="compBenzinerLiter">0</td>
+                        <td id="compBenzinerPrice">1.65</td>
+                        <td id="compBenzinerTotalCost">0,00 €</td>
+                        <td id="compKm2" style="font-weight: bold;">0</td>
+                        <td id="compBenzinerEuroKm">0,00 €</td>
+                        <td id="compBenzinerEuro100Km">8,50 €</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="yellow" style="margin-top: 20px; text-align: center;">
+                <h3>💰 Gesamtersparnis mit Tesla</h3>
+                <p style="font-size: 2em; font-weight: bold;" id="totalSavings">0,00 €</p>
+            </div>
+        </div>
+
+        <!-- Tesla Statistiken -->
+        <div class="stats-card">
+            <h2 style="margin-bottom: 30px; text-align: center; font-size: 2em;">📊 Alle Ladevorgänge</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 15px; text-align: center; color: white; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
+                    <p style="font-size: 3em; font-weight: bold; margin-bottom: 10px;"><span id="totalCost">0</span> €</p>
+                    <p style="font-size: 1.1em; opacity: 0.9;">Gesamtkosten</p>
+                </div>
+                <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 30px; border-radius: 15px; text-align: center; color: white; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
+                    <p style="font-size: 3em; font-weight: bold; margin-bottom: 10px;"><span id="totalKwh">0</span></p>
+                    <p style="font-size: 1.1em; opacity: 0.9;">Gesamte kWh<br>Geladen</p>
+                </div>
+                <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); padding: 30px; border-radius: 15px; text-align: center; color: white; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
+                    <p style="font-size: 3em; font-weight: bold; margin-bottom: 10px;"><span id="avgPrice">0</span> €</p>
+                    <p style="font-size: 1.1em; opacity: 0.9;">Ø Preis/kWh<br>Durchschnitt</p>
+                </div>
+                <div style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); padding: 30px; border-radius: 15px; text-align: center; color: white; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
+                    <p style="font-size: 3em; font-weight: bold; margin-bottom: 10px;"><span id="chargeCount">0</span></p>
+                    <p style="font-size: 1.1em; opacity: 0.9;">Anzahl Ladevorgänge<br>Insgesamt</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kilometerstand -->
+        <div class="stats-card highlight">
+            <h2 style="margin-bottom: 15px;">📍 Kilometerstand</h2>
+            <p style="margin-bottom: 15px;">Aktueller Kilometerstand: <strong id="kmDisplay">0 km</strong></p>
+            <div>
+                <input type="number" id="newKm" placeholder="Neuer Kilometerstand eingeben" style="width: 300px;" />
+                <button onclick="updateKilometerstand()">📍 Kilometerstand speichern</button>
+            </div>
+        </div>
+
+        <!-- Ladevorgang hinzufügen -->
+        <div class="stats-card">
+            <h2 style="margin-bottom: 20px;">➕ Ladevorgang hinzufügen</h2>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
+                <input type="date" id="chargeDate" />
+                <select id="chargeProviderSelect" onchange="toggleProviderInput()" style="width: 250px;">
+                    <option value="">-- Anbieter wählen --</option>
+                    <option value="Virta">Virta</option>
+                    <option value="Tesla Supercharger">Tesla Supercharger</option>
+                    <option value="SWM">SWM</option>
+                    <option value="myEV - Bosch">myEV - Bosch</option>
+                    <option value="SchuKo">SchuKo</option>
+                    <option value="Aldi Ladestation">Aldi Ladestation</option>
+                    <option value="Chargepoint">Chargepoint</option>
+                    <option value="Maingau">Maingau</option>
+                    <option value="Türkei Lader">Türkei Lader</option>
+                    <option value="custom">✏️ Sonstiges (eigene Eingabe)</option>
+                </select>
+                <input type="text" id="chargeProvider" placeholder="Eigener Anbieter..." style="width: 250px; display: none;" />
+                <input type="number" id="chargeKwh" placeholder="kWh" step="0.01" />
+                <input type="number" id="chargePrice" placeholder="€/kWh" step="0.001" />
+                <button onclick="addCharging()">➕ Hinzufügen</button>
+            </div>
+        </div>
+
+        <!-- Ladevorgänge Tabelle -->
+        <div class="stats-card">
+            <div class="collapsible-header" onclick="toggleCharging()">
+                <span id="chargingIcon">▼</span>
+                <span style="font-size: 1.5em;">📊</span>
+                <span>Alle Ladevorgänge</span>
+            </div>
+            <div class="collapsible-content" id="chargingContent">
+                <table id="chargingTable">
+                    <thead>
+                        <tr>
+                            <th>Datum</th>
+                            <th>Anbieter</th>
+                            <th>kWh</th>
+                            <th>€/kWh</th>
+                            <th>Gesamtpreis</th>
+                            <th>Aktion</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- E10 Preisverwaltung -->
+        <div class="stats-card">
+            <h2 style="margin-bottom: 20px;">⛽ Benzinpreis-Verwaltung</h2>
+            
+            <!-- ADAC Link -->
+            <div style="margin-bottom: 20px; padding: 15px; background: #e3f2fd; border-radius: 10px;">
+                <p style="margin-bottom: 10px;">
+                    <strong>🔗 Aktuelle Spritpreise finden:</strong>
+                </p>
+                <a href="https://www.adac.de/verkehr/tanken-kraftstoff-antrieb/deutschland/kraftstoffpreisentwicklung/" 
+                   target="_blank" 
+                   style="display: inline-block; background: #1976d2; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: bold;">
+                    🚗 ADAC Spritpreise
+                </a>
+            </div>
+
+            <!-- Monatliche Benzinpreise -->
+            <div style="border: 2px solid #667eea; border-radius: 10px; padding: 20px; background: #f5f5f5;">
+                <h3 style="margin-bottom: 15px;">📅 Monatliche Benzinpreise erfassen</h3>
+                <p style="margin-bottom: 15px; color: #666;">
+                    <strong>Berechneter Durchschnitt:</strong> <span id="calculatedAvg" style="font-size: 1.3em; color: #667eea;">1,65 €/Liter</span>
+                    <br>
+                    <small>(Dieser Durchschnitt wird automatisch in der Vergleichstabelle verwendet)</small>
+                </p>
+                <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 15px;">
+                    <input type="month" id="fuelMonth" />
+                    <input type="number" id="fuelMonthPrice" placeholder="Durchschnittspreis €/Liter" step="0.01" style="width: 200px;" />
+                    <button onclick="addMonthlyFuelPrice()">➕ Monat hinzufügen</button>
+                </div>
+                <div id="monthlyPricesList" style="margin-top: 15px;"></div>
+            </div>
+        </div>
+
+        <!-- Backup & Restore -->
+        <div class="stats-card">
+            <h2 style="margin-bottom: 20px;">💾 Backup & Restore</h2>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button onclick="createBackup()">📥 Backup erstellen</button>
+                <input type="file" id="restoreFile" accept=".json" style="display: none;" onchange="restoreBackup()" />
+                <button onclick="document.getElementById('restoreFile').click()">📤 Backup wiederherstellen</button>
+                <button onclick="clearAllData()" class="delete-btn">🗑️ Alle Daten löschen</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data variables
+        let kilometerstand = 0;
+        let chargingData = [{"date": "2025-06-24", "provider": "Virta", "kwh": 52.3, "price": 0, "notes": ""}, {"date": "2025-09-18", "provider": "Virta", "kwh": 227, "price": 0, "notes": ""}];
+        let monthlyFuelPrices = {};
+
+        // Update Kilometerstand
+        function updateKilometerstand() {
+            const input = document.getElementById('newKm').value;
+            const newKm = parseInt(input);
+            
+            if (!newKm || newKm < 0) {
+                alert('❌ Bitte gültige Zahl eingeben!');
+                return;
+            }
+
+            kilometerstand = newKm;
+            document.getElementById('kmDisplay').textContent = kilometerstand.toLocaleString('de-DE') + ' km';
+            document.getElementById('compKm').textContent = kilometerstand.toLocaleString('de-DE');
+            document.getElementById('compKm2').textContent = kilometerstand.toLocaleString('de-DE');
+            
+            saveData();
+            updateStatistics();
+            
+            alert('✅ Kilometerstand aktualisiert: ' + kilometerstand.toLocaleString('de-DE') + ' km');
+            document.getElementById('newKm').value = '';
+        }
+
+        
+        // Toggle provider input field
+        function toggleProviderInput() {
+            const select = document.getElementById('chargeProviderSelect');
+            const input = document.getElementById('chargeProvider');
+            
+            if (select.value === 'custom') {
+                input.style.display = 'block';
+                input.focus();
+            } else {
+                input.style.display = 'none';
+            }
+        }
+
+        // Add charging entry
+        function addCharging() {
+            const date = document.getElementById('chargeDate').value;
+            const providerSelect = document.getElementById('chargeProviderSelect').value;
+            const providerInput = document.getElementById('chargeProvider').value;
+            const provider = providerSelect === 'custom' ? providerInput : providerSelect;
+            const kwh = parseFloat(document.getElementById('chargeKwh').value);
+            const price = parseFloat(document.getElementById('chargePrice').value);
+
+            if (!date || !provider || !kwh || !price) {
+                alert('❌ Bitte alle Felder ausfüllen!');
+                return;
+            }
+
+            chargingData.push({ date, provider, kwh, price });
+            
+            document.getElementById('chargeDate').value = '';
+            document.getElementById('chargeProviderSelect').value = '';
+            document.getElementById('chargeProvider').value = '';
+            document.getElementById('chargeProvider').style.display = 'none';
+            document.getElementById('chargeKwh').value = '';
+            document.getElementById('chargePrice').value = '';
+
+            saveData();
+            renderCharging();
+            updateStatistics();
+            alert('✅ Ladevorgang hinzugefügt!');
+        }
+
+        // Delete charging entry
+        function deleteChargingEntry(index) {
+            if (confirm('Wirklich löschen?')) {
+                chargingData.splice(index, 1);
+                saveData();
+                renderCharging();
+                updateStatistics();
+            }
+        }
+
+        // Render charging table
+        function renderCharging() {
+            const tbody = document.getElementById('chargingTable').querySelector('tbody');
+            tbody.innerHTML = '';
+            
+            chargingData.forEach((entry, index) => {
+                const row = tbody.insertRow();
+                const totalPrice = (entry.kwh * entry.price).toFixed(2);
+                row.innerHTML = `
+                    <td>${entry.date}</td>
+                    <td>${entry.provider}</td>
+                    <td>${entry.kwh.toFixed(2)}</td>
+                    <td>${entry.price.toFixed(3)} €</td>
+                    <td><strong>${totalPrice} €</strong></td>
+                    <td><button onclick="deleteChargingEntry(${index})" class="delete-btn">🗑️ Löschen</button></td>
+                `;
+            });
+        }
+
+        // Toggle charging table
+        function toggleCharging() {
+            const content = document.getElementById('chargingContent');
+            const icon = document.getElementById('chargingIcon');
+            
+            content.classList.toggle('collapsed');
+            icon.textContent = content.classList.contains('collapsed') ? '▶' : '▼';
+        }
+
+        // Update statistics
+        function updateStatistics() {
+            const totalKwh = chargingData.reduce((sum, e) => sum + e.kwh, 0);
+            const totalCost = chargingData.reduce((sum, e) => sum + (e.kwh * e.price), 0);
+            const avgPrice = totalKwh > 0 ? totalCost / totalKwh : 0;
+            const chargeCount = chargingData.length;
+
+            document.getElementById('totalKwh').textContent = totalKwh.toFixed(2);
+            document.getElementById('totalCost').textContent = totalCost.toFixed(2);
+            document.getElementById('avgPrice').textContent = avgPrice.toFixed(3);
+            document.getElementById('chargeCount').textContent = chargeCount;
+
+            updateComparison(totalKwh, totalCost, avgPrice);
+        }
+
+        // Update comparison
+        function updateComparison(teslaKwh, teslaCost, teslaAvgPrice) {
+            const benzinerLiter = (kilometerstand / 100) * 8.5;
+            
+            // Calculate average from monthly prices
+            const prices = Object.values(monthlyFuelPrices).map(p => p.price);
+            const avgFuelPrice = prices.length > 0 ? prices.reduce((a, b) => a + b, 0) / prices.length : 1.65;
+            
+            const benzinerCost = benzinerLiter * avgFuelPrice;
+            const savings = benzinerCost - teslaCost;
+
+            document.getElementById('avgFuelPriceDisplay').textContent = avgFuelPrice.toFixed(2);
+            document.getElementById('monthCountDisplay').textContent = prices.length;
+            
+            // Update calculated average display
+            if (document.getElementById('calculatedAvg')) {
+                document.getElementById('calculatedAvg').textContent = prices.length > 0 
+                    ? avgFuelPrice.toFixed(2) + ' €/Liter (Ø aus ' + prices.length + ' Monaten)'
+                    : '1,65 €/Liter (Standard - keine Monate erfasst)';
+            }
+            
+            document.getElementById('compTeslaKwh').textContent = teslaKwh.toFixed(2);
+            document.getElementById('compTeslaPrice').textContent = teslaAvgPrice.toFixed(3) + ' €';
+            document.getElementById('compTeslaTotalCost').textContent = teslaCost.toFixed(2) + ' €';
+            document.getElementById('compKm').textContent = kilometerstand.toLocaleString('de-DE');
+            document.getElementById('compKm2').textContent = kilometerstand.toLocaleString('de-DE');
+            document.getElementById('compTeslaEuroKm').textContent = kilometerstand > 0 ? (teslaCost / kilometerstand).toFixed(3) + ' €' : '0,00 €';
+            document.getElementById('compTeslaEuro100Km').textContent = kilometerstand > 0 ? ((teslaCost / kilometerstand) * 100).toFixed(2) + ' €' : '0,00 €';
+            
+            document.getElementById('compBenzinerLiter').textContent = benzinerLiter.toFixed(2);
+            document.getElementById('compBenzinerPrice').textContent = avgFuelPrice.toFixed(2);
+            document.getElementById('compBenzinerTotalCost').textContent = benzinerCost.toFixed(2) + ' €';
+            document.getElementById('compBenzinerEuroKm').textContent = kilometerstand > 0 ? (benzinerCost / kilometerstand).toFixed(3) + ' €' : '0,00 €';
+            document.getElementById('compBenzinerEuro100Km').textContent = '8,50 €';
+            
+            document.getElementById('totalSavings').textContent = savings.toFixed(2) + ' €';
+            document.getElementById('totalSavings').style.color = savings >= 0 ? '#2e7d32' : '#c62828';
+        }
+
+        // Add monthly fuel price
+        function addMonthlyFuelPrice() {
+            const month = document.getElementById('fuelMonth').value;
+            const price = parseFloat(document.getElementById('fuelMonthPrice').value);
+
+            if (!month || !price || price <= 0) {
+                alert('❌ Bitte Monat und gültigen Preis eingeben!');
+                return;
+            }
+
+            monthlyFuelPrices[month] = { price };
+            
+            document.getElementById('fuelMonth').value = '';
+            document.getElementById('fuelMonthPrice').value = '';
+
+            saveData();
+            renderMonthlyPrices();
+            updateStatistics();
+            alert('✅ Monatlicher Preis hinzugefügt! Durchschnitt wurde neu berechnet.');
+        }
+
+        // Render monthly prices
+        function renderMonthlyPrices() {
+            const container = document.getElementById('monthlyPricesList');
+            container.innerHTML = '';
+            
+            const sortedMonths = Object.keys(monthlyFuelPrices).sort().reverse();
+            
+            if (sortedMonths.length === 0) {
+                container.innerHTML = '<p style="color: #999; font-style: italic;">Noch keine monatlichen Preise erfasst</p>';
+                return;
+            }
+            
+            sortedMonths.forEach(month => {
+                const price = monthlyFuelPrices[month].price;
+                const div = document.createElement('div');
+                div.style.cssText = 'padding: 10px; background: white; border-radius: 8px; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);';
+                div.innerHTML = `
+                    <span><strong>${month}:</strong> ${price.toFixed(2)} €/Liter</span>
+                    <button onclick="deleteMonthlyPrice('${month}')" class="delete-btn" style="padding: 5px 10px; font-size: 0.9em;">🗑️</button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // Delete monthly price
+        function deleteMonthlyPrice(month) {
+            if (confirm('Monat ' + month + ' wirklich löschen?')) {
+                delete monthlyFuelPrices[month];
+                saveData();
+                renderMonthlyPrices();
+                updateStatistics();
+                alert('✅ Monat gelöscht! Durchschnitt wurde neu berechnet.');
+            }
+        }
+
+        // Save data to localStorage
+        function saveData() {
+            localStorage.setItem('chargingData', JSON.stringify(chargingData));
+            localStorage.setItem('kilometerstand', kilometerstand.toString());
+            localStorage.setItem('monthlyFuelPrices', JSON.stringify(monthlyFuelPrices));
+            console.log('💾 Daten gespeichert:', { chargingData, kilometerstand, monthlyFuelPrices });
+        }
+
+        // Load data from localStorage
+        function loadData() {
+            const savedCharging = localStorage.getItem('chargingData');
+            if (savedCharging) {
+                chargingData = JSON.parse(savedCharging);
+                console.log('✅ Ladevorgänge geladen:', chargingData.length);
+            }
+
+            const savedKm = localStorage.getItem('kilometerstand');
+            if (savedKm) {
+                kilometerstand = parseInt(savedKm);
+                console.log('✅ Kilometerstand geladen:', kilometerstand);
+            }
+
+            const savedMonthly = localStorage.getItem('monthlyFuelPrices');
+            if (savedMonthly) {
+                monthlyFuelPrices = JSON.parse(savedMonthly);
+                console.log('✅ Monatliche Preise geladen:', monthlyFuelPrices);
+            }
+
+            document.getElementById('kmDisplay').textContent = kilometerstand.toLocaleString('de-DE') + ' km';
+        }
+
+        // Create backup
+        function createBackup() {
+            const backup = {
+                chargingData,
+                kilometerstand,
+                monthlyFuelPrices,
+                backupDate: new Date().toISOString()
+            };
+
+            const dataStr = JSON.stringify(backup, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'tesla_backup_' + new Date().toISOString().split('T')[0] + '.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            alert('✅ Backup erstellt!');
+        }
+
+        // Restore backup
+        function restoreBackup() {
+            const file = document.getElementById('restoreFile').files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const backup = JSON.parse(e.target.result);
+                    
+                    chargingData = backup.chargingData || [];
+                    
+                    if (backup.kilometerstand && typeof backup.kilometerstand === 'object') {
+                        kilometerstand = backup.kilometerstand.current || 0;
+                    } else {
+                        kilometerstand = backup.kilometerstand || 0;
+                    }
+                    
+                    monthlyFuelPrices = backup.monthlyFuelPrices || {};
+
+                    saveData();
+                    loadData();
+                    renderCharging();
+                    renderMonthlyPrices();
+                    updateStatistics();
+                    
+                    alert('✅ Backup wiederhergestellt!');
+                } catch (err) {
+                    alert('❌ Fehler beim Wiederherstellen: ' + err.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // Clear all data
+        function clearAllData() {
+            if (confirm('⚠️ ACHTUNG: Alle Daten werden gelöscht! Fortfahren?')) {
+                if (confirm('Wirklich ALLE Daten löschen? Dies kann nicht rückgängig gemacht werden!')) {
+                    localStorage.clear();
+                    chargingData = [];
+                    kilometerstand = 0;
+                    monthlyFuelPrices = {};
+                    
+                    loadData();
+                    renderCharging();
+                    renderMonthlyPrices();
+                    updateStatistics();
+                    
+                    alert('✅ Alle Daten gelöscht!');
+                }
+            }
+        }
+
+        // Initialize on page load
+        console.log('🚀 App wird initialisiert...');
+        loadData();
+        renderCharging();
+        renderMonthlyPrices();
+        updateStatistics();
+        console.log('✅ App initialisiert!');
+
+        // Set today's date as default
+        document.getElementById('chargeDate').valueAsDate = new Date();
+    </script>
+</body>
+</html>
