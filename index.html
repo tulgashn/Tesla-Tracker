@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -41,8 +42,7 @@
             font-size: 1.1em;
         }
 
-        /* Kostenvergleich */
-        .comparison-top {
+        .comparison-section {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             padding: 30px;
             border-radius: 15px;
@@ -50,9 +50,9 @@
             color: white;
         }
 
-        .comparison-top h2 {
+        .comparison-section h2 {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             font-size: 1.8em;
         }
 
@@ -64,56 +64,71 @@
             overflow: hidden;
         }
 
-        .comparison-table th,
-        .comparison-table td {
+        .comparison-table th {
+            background: #333;
+            color: white;
             padding: 15px;
-            text-align: center;
-            border: 1px solid #ddd;
-            color: #333;
+            text-align: left;
+            font-weight: 600;
         }
 
-        .comparison-table th {
-            background: #f8f9fa;
-            font-weight: bold;
+        .comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
         }
 
         .tesla-row {
             background: #d4edda;
+            color: #155724;
         }
 
         .benziner-row {
             background: #f8d7da;
+            color: #721c24;
         }
 
         .savings-row {
             background: #fff3cd;
+            color: #856404;
             font-weight: bold;
             font-size: 1.1em;
         }
 
-        .form-group {
+        .form-section {
             background: #f8f9fa;
             padding: 25px;
-            border-radius: 10px;
+            border-radius: 15px;
             margin-bottom: 30px;
         }
 
-        .form-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 15px;
+        .form-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .form-field {
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
             display: flex;
             flex-direction: column;
         }
 
         label {
             margin-bottom: 5px;
-            font-weight: 600;
-            color: #333;
+            color: #555;
+            font-weight: 500;
         }
 
         input, select, textarea {
@@ -131,31 +146,30 @@
 
         textarea {
             resize: vertical;
-            min-height: 80px;
-            font-family: inherit;
+            min-height: 60px;
         }
 
         button {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 15px 30px;
+            padding: 12px 30px;
             border: none;
             border-radius: 8px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
         button:hover {
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
 
         button:active {
             transform: translateY(0);
         }
 
-        /* Statistik-Boxen - kompakter */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -163,139 +177,231 @@
             margin-bottom: 30px;
         }
 
-        .stat-box {
-            background: white;
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            color: white;
             text-align: center;
         }
 
-        .stat-box h3 {
-            color: #666;
+        .stat-card h3 {
             font-size: 0.85em;
             margin-bottom: 8px;
-            font-weight: 600;
+            opacity: 0.9;
         }
 
-        .stat-box .stat-value {
-            color: #667eea;
+        .stat-card .value {
             font-size: 1.6em;
             font-weight: bold;
-            margin-bottom: 3px;
-        }
-
-        .stat-box .stat-label {
-            color: #999;
-            font-size: 0.75em;
         }
 
         .table-container {
-            background: #f8f9fa;
-            padding: 25px;
-            border-radius: 10px;
+            overflow-x: auto;
             margin-bottom: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
         }
 
         th, td {
             padding: 15px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
         }
 
-        th {
-            background: #667eea;
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            user-select: none;
-            position: relative;
+        tbody tr {
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.2s;
         }
 
-        th:hover {
-            background: #5568d3;
+        tbody tr:hover {
+            background-color: #f8f9fa;
         }
 
-        th.sortable::after {
-            content: ' ⇅';
-            opacity: 0.5;
-        }
-
-        th.sort-asc::after {
-            content: ' ▲';
-            opacity: 1;
-        }
-
-        th.sort-desc::after {
-            content: ' ▼';
-            opacity: 1;
-        }
-
-        tr:hover {
-            background: #f5f5f5;
-        }
-
-        .edit-btn, .delete-btn {
-            padding: 8px 15px;
-            margin-right: 5px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
+        .btn-small {
+            padding: 6px 12px;
             font-size: 14px;
+            margin: 0 2px;
         }
 
-        .edit-btn {
-            background: #ffc107;
-            color: #333;
+        .btn-edit {
+            background: linear-gradient(135deg, #ffa726 0%, #fb8c00 100%);
         }
 
-        .delete-btn {
-            background: #dc3545;
-            color: white;
+        .btn-delete {
+            background: linear-gradient(135deg, #ef5350 0%, #e53935 100%);
         }
 
         .chart-container {
-            background: #f8f9fa;
+            background: white;
             padding: 25px;
-            border-radius: 10px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .chart-container h3 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        canvas {
+            max-width: 100%;
+            height: auto !important;
+        }
+
+        .monthly-stats-table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        .monthly-stats-table th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .monthly-stats-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .provider-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
             margin-bottom: 30px;
         }
 
-        .chart-container h2 {
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        .chart-wrapper {
-            background: white;
+        .provider-card {
+            background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
             padding: 20px;
-            border-radius: 10px;
-            position: relative;
-            height: 400px;
+            border-radius: 12px;
+            color: white;
         }
 
-        .price-item {
+        .provider-card h3 {
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .provider-card .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        .backup-section {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+
+        .backup-section h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+
+        .backup-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn-backup {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+
+        .btn-restore {
+            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+        }
+
+        .btn-export {
+            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+        }
+
+        .fuel-price-section {
+            background: #fff8e1;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .fuel-price-section h2 {
+            color: #f57c00;
+            margin-bottom: 20px;
+        }
+
+        .fuel-price-list {
+            margin-top: 20px;
+        }
+
+        .fuel-price-item {
             background: white;
-            padding: 12px;
+            padding: 15px;
             border-radius: 8px;
             margin-bottom: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        .price-item button {
-            padding: 6px 12px;
-            font-size: 14px;
+        .fuel-price-item strong {
+            color: #f57c00;
+        }
+
+        .btn-orange {
+            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+        }
+
+        .adac-link {
+            background: linear-gradient(135deg, #ff6f00 0%, #e65100 100%);
+            text-decoration: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: inline-block;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+
+        .adac-link:hover {
+            transform: translateY(-2px);
+        }
+
+        .km-fuel-section {
+            background: #ffe0b2;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .km-fuel-section h2 {
+            color: #e65100;
+            margin-bottom: 20px;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 15px;
+            align-items: end;
         }
     </style>
 </head>
@@ -304,14 +410,9 @@
         <h1>🚗⚡ Tesla Model Y Juniper</h1>
         <p class="subtitle">Ladekosten Tracker & Vergleichsrechner</p>
 
-        <!-- Kostenvergleich -->
-        <div class="comparison-top">
+        <!-- 1. KOSTENVERGLEICH -->
+        <div class="comparison-section">
             <h2>🔋 vs ⛽ Kostenvergleich: Tesla vs. Benziner (8,5L/100km)</h2>
-            <p style="text-align: center; margin-bottom: 20px;">
-                Durchschnittlicher Super E10 Preis: <strong id="avgFuelPriceDisplay">1,65 €/Liter</strong>
-                (basierend auf <span id="monthCountDisplay">0</span> erfassten Monaten)
-            </p>
-
             <table class="comparison-table">
                 <thead>
                     <tr>
@@ -324,716 +425,67 @@
                         <th>€/100km</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="comparisonTableBody">
                     <tr class="tesla-row">
-                        <td><strong>⚡ Tesla</strong></td>
-                        <td id="compTeslaKwh">0</td>
-                        <td id="compTeslaPrice">0,00 €</td>
-                        <td id="compTeslaTotalCost">0,00 €</td>
-                        <td id="compKm" rowspan="2" style="vertical-align: middle;">0</td>
-                        <td id="compTeslaEuroKm">0,00 €</td>
-                        <td id="compTeslaEuro100Km">0,00 €</td>
+                        <td><strong>Tesla</strong></td>
+                        <td>0</td>
+                        <td>0 €</td>
+                        <td>0 €</td>
+                        <td>0</td>
+                        <td>0 €</td>
+                        <td>0 €</td>
                     </tr>
                     <tr class="benziner-row">
-                        <td><strong>⛽ Benziner 8,5L</strong></td>
-                        <td id="compBenzinerLiter">0</td>
-                        <td id="compBenzinerPrice">1,65 €</td>
-                        <td id="compBenzinerTotalCost">0,00 €</td>
-                        <td id="compBenzinerEuroKm">0,00 €</td>
-                        <td id="compBenzinerEuro100Km">0,00 €</td>
+                        <td><strong>Benziner 8,5 Liter</strong></td>
+                        <td>0</td>
+                        <td>0 €</td>
+                        <td>0 €</td>
+                        <td>0</td>
+                        <td>0 €</td>
+                        <td>0 €</td>
                     </tr>
                     <tr class="savings-row">
-                        <td colspan="3"><strong>💰 Gesamtersparnis mit Tesla</strong></td>
-                        <td colspan="4"><strong id="totalSavings">0,00 €</strong></td>
+                        <td colspan="3"><strong>Gesamtersparnis</strong></td>
+                        <td colspan="4"><strong>0 €</strong></td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
-        <!-- Formular -->
-        <form class="form-group" id="chargingForm" onsubmit="addCharging(event)">
+        <!-- 2. NEUER LADEVORGANG -->
+        <div class="form-section">
             <h2>⚡ Neuen Ladevorgang hinzufügen</h2>
-            <div class="form-row">
-                <div class="form-field">
+            <div class="form-grid">
+                <div class="form-group">
                     <label for="date">Datum</label>
                     <input type="date" id="date" required>
                 </div>
-                <div class="form-field">
+                <div class="form-group">
                     <label for="provider">Ladeanbieter</label>
                     <select id="provider" required>
                         <option value="">-- Bitte wählen --</option>
-                        <option value="Tesla Supercharger">Tesla Supercharger</option>
-                        <option value="Ionity">Ionity</option>
-                        <option value="EnBW">EnBW</option>
-                        <option value="Fastned">Fastned</option>
-                        <option value="Allego">Allego</option>
-                        <option value="Shell Recharge">Shell Recharge</option>
-                        <option value="Aral Pulse">Aral Pulse</option>
                         <option value="Virta">Virta</option>
-                        <option value="Zuhause">Zuhause</option>
-                        <option value="Sonstiges">Sonstiges</option>
+                        <option value="Tesla Supercharger">Tesla Supercharger</option>
+                        <option value="SWM">SWM</option>
+                        <option value="myEV - Bosch">myEV - Bosch</option>
+                        <option value="SchuKo">SchuKo</option>
+                        <option value="Aldi Ladestation">Aldi Ladestation</option>
+                        <option value="Chargepoint">Chargepoint</option>
+                        <option value="Maingau">Maingau</option>
+                        <option value="Türkei Ladestationen">Türkei Ladestationen</option>
                     </select>
                 </div>
-                <div class="form-field">
+                <div class="form-group">
                     <label for="kwh">Geladene kWh</label>
                     <input type="number" id="kwh" step="0.1" min="0" required>
                 </div>
-                <div class="form-field">
+                <div class="form-group">
                     <label for="price">Preis pro kWh (€)</label>
                     <input type="number" id="price" step="0.01" min="0" required>
                 </div>
             </div>
-            <div class="form-field">
+            <div class="form-group" style="margin-bottom: 20px;">
                 <label for="notes">Notizen (optional)</label>
                 <textarea id="notes" placeholder="z.B. Schnellladen, über Nacht, etc."></textarea>
             </div>
-            <button type="submit">🔌 Ladevorgang speichern</button>
-        </form>
-
-        <!-- Statistik -->
-        <div class="stats-grid">
-            <div class="stat-box">
-                <h3>Gesamtkosten</h3>
-                <div class="stat-value" id="totalCost">0,00 €</div>
-                <div class="stat-label">Alle Ladevorgänge</div>
-            </div>
-            <div class="stat-box">
-                <h3>Gesamte kWh</h3>
-                <div class="stat-value" id="totalKwh">0</div>
-                <div class="stat-label">Geladen</div>
-            </div>
-            <div class="stat-box">
-                <h3>Ø Preis/kWh</h3>
-                <div class="stat-value" id="avgPrice">0,00 €</div>
-                <div class="stat-label">Durchschnitt</div>
-            </div>
-            <div class="stat-box">
-                <h3>Anzahl Ladevorgänge</h3>
-                <div class="stat-value" id="chargingCount">0</div>
-                <div class="stat-label">Insgesamt</div>
-            </div>
-        </div>
-
-        <!-- Benzinpreis-Erfassung -->
-        <div class="form-group">
-            <h2>⛽ Monatliche Benzinpreis-Erfassung</h2>
-            <div class="form-row">
-                <div class="form-field">
-                    <label for="priceMonth">Monat</label>
-                    <select id="priceMonth">
-                        <option value="01">Januar</option>
-                        <option value="02">Februar</option>
-                        <option value="03">März</option>
-                        <option value="04">April</option>
-                        <option value="05">Mai</option>
-                        <option value="06">Juni</option>
-                        <option value="07">Juli</option>
-                        <option value="08">August</option>
-                        <option value="09">September</option>
-                        <option value="10">Oktober</option>
-                        <option value="11">November</option>
-                        <option value="12">Dezember</option>
-                    </select>
-                </div>
-                <div class="form-field">
-                    <label for="priceYear">Jahr</label>
-                    <input type="number" id="priceYear" value="2026" min="2020" max="2030">
-                </div>
-                <div class="form-field">
-                    <label for="monthlyE10Price">E10 Preis (€/Liter)</label>
-                    <input type="number" id="monthlyE10Price" step="0.01" min="0">
-                </div>
-                <div class="form-field">
-                    <label for="currentKm">Kilometerstand</label>
-                    <input type="number" id="currentKm" min="0">
-                </div>
-            </div>
-            <button type="button" onclick="saveMonthlyPrice()">💾 Speichern</button>
-            <br><br>
-            <a href="https://www.adac.de/verkehr/tanken-kraftstoff-antrieb/deutschland/kraftstoffpreisentwicklung/" 
-               target="_blank" style="background: linear-gradient(135deg, #ff6f00 0%, #e65100 100%); text-decoration: none; color: white; padding: 10px 20px; border-radius: 8px; display: inline-block; font-weight: 600;">
-                📊 Aktuelle ADAC Preise abrufen
-            </a>
-            
-            <div id="monthlyPricesList" style="margin-top: 20px;"></div>
-        </div>
-
-        <!-- Benzinpreis-Chart -->
-        <div class="chart-container">
-            <h2>📈 Benzinpreis-Entwicklung (Super E10)</h2>
-            <div class="chart-wrapper">
-                <canvas id="fuelPriceChart"></canvas>
-            </div>
-        </div>
-
-        <!-- Tabelle -->
-        <div class="table-container">
-            <h2>📊 Alle Ladevorgänge</h2>
-            <p style="margin-bottom: 15px; color: #666;">
-                <strong>💡 Tipp:</strong> Klicken Sie auf die Spaltenüberschriften, um die Tabelle zu sortieren.
-            </p>
-            <div style="margin-bottom: 15px;">
-                <button onclick="deleteAllData()" style="background: #dc3545;">🗑️ Alle löschen</button>
-                <button onclick="createBackup()" style="background: #28a745;">💾 Backup</button>
-                <input type="file" id="restoreFile" accept=".json" onchange="restoreData(event)" style="display:none;">
-                <button onclick="document.getElementById('restoreFile').click()" style="background: #17a2b8;">📂 Wiederherstellen</button>
-            </div>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th class="sortable" onclick="sortTable('date')">Datum</th>
-                        <th class="sortable" onclick="sortTable('provider')">Anbieter</th>
-                        <th class="sortable" onclick="sortTable('kwh')">kWh</th>
-                        <th class="sortable" onclick="sortTable('totalCost')">Preis (€)</th>
-                        <th class="sortable" onclick="sortTable('price')">€/kWh</th>
-                        <th>Notizen</th>
-                        <th>Aktionen</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody"></tbody>
-            </table>
-        </div>
-
-        <!-- Charts -->
-        <div class="chart-container">
-            <h2>📊 Monatliche Ladekosten</h2>
-            <div class="chart-wrapper">
-                <canvas id="monthlyChart"></canvas>
-            </div>
-        </div>
-
-        <div class="chart-container">
-            <h2>💰 Preisentwicklung pro kWh</h2>
-            <div class="chart-wrapper">
-                <canvas id="priceChart"></canvas>
-            </div>
-        </div>
-
-        <div class="chart-container">
-            <h2>🏢 Anbieter-Statistik</h2>
-            <div class="chart-wrapper">
-                <canvas id="providerChart"></canvas>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        let chargingData = [];
-        let kilometerstand = { current: 0, first: 0 };
-        let e10Price = 1.65;
-        let monthlyFuelPrices = {};
-        let editingIndex = null;
-        let sortColumn = null;
-        let sortDirection = 'asc';
-
-        // Set today's date as default
-        document.getElementById('date').valueAsDate = new Date();
-        const currentMonth = new Date().getMonth() + 1;
-        document.getElementById('priceMonth').value = currentMonth.toString().padStart(2, '0');
-
-        function addCharging(event) {
-            event.preventDefault();
-
-            const priceInput = document.getElementById('price').value;
-            const kwhValue = parseFloat(document.getElementById('kwh').value);
-            const priceValue = parseFloat(priceInput);
-
-            // FIXED VALIDATION: Allow price = 0, but not empty
-            if (!document.getElementById('date').value || 
-                !document.getElementById('provider').value || 
-                isNaN(kwhValue) || kwhValue <= 0 || 
-                priceInput === '' || isNaN(priceValue) || priceValue < 0) {
-                alert('Bitte fülle alle Pflichtfelder korrekt aus!\n\n• Datum und Anbieter müssen ausgefüllt sein\n• kWh muss größer als 0 sein\n• Preis darf 0 sein, aber nicht leer');
-                return;
-            }
-
-            const entry = {
-                date: document.getElementById('date').value,
-                provider: document.getElementById('provider').value,
-                kwh: kwhValue,
-                price: priceValue,
-                notes: document.getElementById('notes').value
-            };
-
-            if (editingIndex !== null) {
-                chargingData[editingIndex] = entry;
-                editingIndex = null;
-            } else {
-                chargingData.push(entry);
-            }
-
-            chargingData.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-            saveData();
-            renderTable();
-            updateStatistics();
-            updateMonthlyChart();
-            updatePriceChart();
-            updateProviderStats();
-
-            document.getElementById('chargingForm').reset();
-            document.getElementById('date').valueAsDate = new Date();
-        }
-
-        function sortTable(column) {
-            // Toggle sort direction if same column
-            if (sortColumn === column) {
-                sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
-            } else {
-                sortColumn = column;
-                sortDirection = 'asc';
-            }
-
-            // Update header classes
-            document.querySelectorAll('th').forEach(th => {
-                th.classList.remove('sort-asc', 'sort-desc');
-            });
-            const clickedHeader = event.target;
-            clickedHeader.classList.add(sortDirection === 'asc' ? 'sort-asc' : 'sort-desc');
-
-            // Sort data
-            chargingData.sort((a, b) => {
-                let valA, valB;
-
-                switch(column) {
-                    case 'date':
-                        valA = new Date(a.date);
-                        valB = new Date(b.date);
-                        break;
-                    case 'provider':
-                        valA = a.provider.toLowerCase();
-                        valB = b.provider.toLowerCase();
-                        break;
-                    case 'kwh':
-                        valA = a.kwh;
-                        valB = b.kwh;
-                        break;
-                    case 'price':
-                        valA = a.price;
-                        valB = b.price;
-                        break;
-                    case 'totalCost':
-                        valA = a.kwh * a.price;
-                        valB = b.kwh * b.price;
-                        break;
-                    default:
-                        return 0;
-                }
-
-                if (valA < valB) return sortDirection === 'asc' ? -1 : 1;
-                if (valA > valB) return sortDirection === 'asc' ? 1 : -1;
-                return 0;
-            });
-
-            renderTable();
-        }
-
-        function editEntry(index) {
-            const entry = chargingData[index];
-            document.getElementById('date').value = entry.date;
-            document.getElementById('provider').value = entry.provider;
-            document.getElementById('kwh').value = entry.kwh;
-            document.getElementById('price').value = entry.price;
-            document.getElementById('notes').value = entry.notes;
-            editingIndex = index;
-
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function deleteEntry(index) {
-            if (confirm('Eintrag wirklich löschen?')) {
-                chargingData.splice(index, 1);
-                saveData();
-                renderTable();
-                updateStatistics();
-                updateMonthlyChart();
-                updatePriceChart();
-                updateProviderStats();
-            }
-        }
-
-        function deleteAllData() {
-            if (confirm('ACHTUNG: Alle Daten werden gelöscht! Vorher ein Backup erstellen?')) {
-                if (confirm('Wirklich ALLE Daten löschen? Dies kann nicht rückgängig gemacht werden!')) {
-                    chargingData = [];
-                    kilometerstand = { current: 0, first: 0 };
-                    monthlyFuelPrices = {};
-                    saveData();
-                    renderTable();
-                    renderMonthlyPricesList();
-                    updateStatistics();
-                    updateMonthlyChart();
-                    updatePriceChart();
-                    updateProviderStats();
-                    updateFuelPriceChart();
-                }
-            }
-        }
-
-        function renderTable() {
-            const tbody = document.getElementById('tableBody');
-            tbody.innerHTML = '';
-
-            chargingData.forEach((entry, index) => {
-                const row = tbody.insertRow();
-                row.innerHTML = `
-                    <td>${new Date(entry.date).toLocaleDateString('de-DE')}</td>
-                    <td>${entry.provider}</td>
-                    <td>${entry.kwh.toFixed(2)} kWh</td>
-                    <td>${(entry.kwh * entry.price).toFixed(2)} €</td>
-                    <td>${entry.price.toFixed(3)} €</td>
-                    <td>${entry.notes || '-'}</td>
-                    <td>
-                        <button class="edit-btn" onclick="editEntry(${index})">✏️ Bearbeiten</button>
-                        <button class="delete-btn" onclick="deleteEntry(${index})">🗑️ Löschen</button>
-                    </td>
-                `;
-            });
-        }
-
-        function updateStatistics() {
-            const totalKwh = chargingData.reduce((sum, e) => sum + e.kwh, 0);
-            const totalCost = chargingData.reduce((sum, e) => sum + (e.kwh * e.price), 0);
-            const avgPrice = totalKwh > 0 ? totalCost / totalKwh : 0;
-
-            document.getElementById('totalKwh').textContent = totalKwh.toFixed(2);
-            document.getElementById('totalCost').textContent = totalCost.toFixed(2) + ' €';
-            document.getElementById('avgPrice').textContent = avgPrice.toFixed(3) + ' €';
-            document.getElementById('chargingCount').textContent = chargingData.length;
-
-            // Update comparison
-            updateComparison(totalKwh, totalCost, avgPrice);
-        }
-
-        function updateComparison(teslaKwh, teslaCost, teslaAvgPrice) {
-            const km = kilometerstand.current - kilometerstand.first;
-            const benzinerLiter = (km / 100) * 8.5;
-
-            // Calculate average fuel price
-            const prices = Object.values(monthlyFuelPrices).map(p => p.price);
-            const avgFuelPrice = prices.length > 0 
-                ? prices.reduce((a, b) => a + b, 0) / prices.length 
-                : e10Price;
-
-            const benzinerCost = benzinerLiter * avgFuelPrice;
-            const savings = benzinerCost - teslaCost;
-
-            // Update display
-            document.getElementById('avgFuelPriceDisplay').textContent = avgFuelPrice.toFixed(2);
-            document.getElementById('monthCountDisplay').textContent = prices.length;
-
-            document.getElementById('compTeslaKwh').textContent = teslaKwh.toFixed(2);
-            document.getElementById('compTeslaPrice').textContent = teslaAvgPrice.toFixed(3) + ' €';
-            document.getElementById('compTeslaTotalCost').textContent = teslaCost.toFixed(2) + ' €';
-            document.getElementById('compKm').textContent = km.toLocaleString('de-DE');
-            document.getElementById('compTeslaEuroKm').textContent = km > 0 
-                ? (teslaCost / km).toFixed(3) + ' €' 
-                : '0,00 €';
-            document.getElementById('compTeslaEuro100Km').textContent = km > 0 
-                ? ((teslaCost / km) * 100).toFixed(2) + ' €' 
-                : '0,00 €';
-
-            document.getElementById('compBenzinerLiter').textContent = benzinerLiter.toFixed(2);
-            document.getElementById('compBenzinerPrice').textContent = avgFuelPrice.toFixed(2);
-            document.getElementById('compBenzinerTotalCost').textContent = benzinerCost.toFixed(2) + ' €';
-            document.getElementById('compBenzinerEuroKm').textContent = km > 0 
-                ? (benzinerCost / km).toFixed(3) + ' €' 
-                : '0,00 €';
-            document.getElementById('compBenzinerEuro100Km').textContent = '8,50 €';
-
-            document.getElementById('totalSavings').textContent = savings.toFixed(2) + ' €';
-            document.getElementById('totalSavings').style.color = savings >= 0 ? '#2e7d32' : '#c62828';
-        }
-
-        function saveMonthlyPrice() {
-            const month = document.getElementById('priceMonth').value;
-            const year = document.getElementById('priceYear').value;
-            const price = parseFloat(document.getElementById('monthlyE10Price').value);
-            const km = parseInt(document.getElementById('currentKm').value) || 0;
-
-            if (!price || price <= 0) {
-                alert('Bitte einen gültigen Preis eingeben!');
-                return;
-            }
-
-            const key = `${year}-${month}`;
-
-            if (Object.keys(monthlyFuelPrices).length === 0) {
-                kilometerstand.first = km;
-            }
-
-            kilometerstand.current = km;
-            monthlyFuelPrices[key] = { price, km };
-            e10Price = price;
-
-            saveData();
-            renderMonthlyPricesList();
-            updateFuelPriceChart();
-            updateStatistics();
-
-            alert('✅ Benzinpreis gespeichert!');
-        }
-
-        function deleteMonthlyPrice(key) {
-            if (confirm('Monatlichen Preis löschen?')) {
-                delete monthlyFuelPrices[key];
-                saveData();
-                renderMonthlyPricesList();
-                updateFuelPriceChart();
-                updateStatistics();
-            }
-        }
-
-        function renderMonthlyPricesList() {
-            const container = document.getElementById('monthlyPricesList');
-            container.innerHTML = '';
-
-            const sorted = Object.entries(monthlyFuelPrices).sort(([a], [b]) => b.localeCompare(a));
-
-            sorted.forEach(([key, data]) => {
-                const [year, month] = key.split('-');
-                const monthNames = ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'];
-
-                const div = document.createElement('div');
-                div.className = 'price-item';
-                div.innerHTML = `
-                    <span><strong>${monthNames[parseInt(month)-1]} ${year}:</strong> ${data.price.toFixed(2)} €/L | ${data.km.toLocaleString('de-DE')} km</span>
-                    <button onclick="deleteMonthlyPrice('${key}')" style="background: #dc3545;">🗑️ Löschen</button>
-                `;
-                container.appendChild(div);
-            });
-        }
-
-        let monthlyChartInstance, priceChartInstance, providerChartInstance, fuelPriceChartInstance;
-
-        function updateMonthlyChart() {
-            const monthlyData = {};
-            chargingData.forEach(entry => {
-                const month = entry.date.substring(0, 7);
-                if (!monthlyData[month]) monthlyData[month] = 0;
-                monthlyData[month] += entry.kwh * entry.price;
-            });
-
-            const labels = Object.keys(monthlyData).sort();
-            const data = labels.map(m => monthlyData[m]);
-
-            if (monthlyChartInstance) monthlyChartInstance.destroy();
-
-            monthlyChartInstance = new Chart(document.getElementById('monthlyChart'), {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Kosten (€)',
-                        data: data,
-                        backgroundColor: 'rgba(102, 126, 234, 0.6)',
-                        borderColor: 'rgba(102, 126, 234, 1)',
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: { beginAtZero: true }
-                    }
-                }
-            });
-        }
-
-        function updatePriceChart() {
-            const labels = chargingData.map(e => e.date);
-            const data = chargingData.map(e => e.price);
-
-            if (priceChartInstance) priceChartInstance.destroy();
-
-            priceChartInstance = new Chart(document.getElementById('priceChart'), {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: '€/kWh',
-                        data: data,
-                        borderColor: 'rgba(245, 87, 108, 1)',
-                        backgroundColor: 'rgba(245, 87, 108, 0.1)',
-                        borderWidth: 2,
-                        tension: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: { beginAtZero: true }
-                    }
-                }
-            });
-        }
-
-        function updateProviderStats() {
-            const providerData = {};
-
-            chargingData.forEach(entry => {
-                if (!providerData[entry.provider]) providerData[entry.provider] = 0;
-                providerData[entry.provider] += entry.kwh * entry.price;
-            });
-
-            const labels = Object.keys(providerData);
-            const data = Object.values(providerData);
-
-            if (providerChartInstance) providerChartInstance.destroy();
-
-            providerChartInstance = new Chart(document.getElementById('providerChart'), {
-                type: 'pie',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        data: data,
-                        backgroundColor: [
-                            '#667eea', '#764ba2', '#f093fb', '#f5576c',
-                            '#4facfe', '#00f2fe', '#43e97b', '#38f9d7'
-                        ]
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false
-                }
-            });
-        }
-
-        function updateFuelPriceChart() {
-            const sorted = Object.entries(monthlyFuelPrices).sort(([a], [b]) => a.localeCompare(b));
-            const labels = sorted.map(([key]) => key);
-            const data = sorted.map(([, value]) => value.price);
-
-            if (fuelPriceChartInstance) fuelPriceChartInstance.destroy();
-
-            fuelPriceChartInstance = new Chart(document.getElementById('fuelPriceChart'), {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'E10 Preis (€/L)',
-                        data: data,
-                        borderColor: '#dc3545',
-                        backgroundColor: 'rgba(220, 53, 69, 0.1)',
-                        borderWidth: 3,
-                        tension: 0,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: false,
-                            ticks: {
-                                callback: function(value) {
-                                    return value.toFixed(2) + ' €';
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        function saveData() {
-            localStorage.setItem('teslaChargingData', JSON.stringify(chargingData));
-            localStorage.setItem('kilometerstand', JSON.stringify(kilometerstand));
-            localStorage.setItem('e10Price', e10Price.toString());
-            localStorage.setItem('monthlyFuelPrices', JSON.stringify(monthlyFuelPrices));
-        }
-
-        function loadData() {
-            const saved = localStorage.getItem('teslaChargingData');
-            if (saved) chargingData = JSON.parse(saved);
-
-            const savedKm = localStorage.getItem('kilometerstand');
-            if (savedKm) kilometerstand = JSON.parse(savedKm);
-
-            const savedPrice = localStorage.getItem('e10Price');
-            if (savedPrice) e10Price = parseFloat(savedPrice);
-
-            const savedMonthly = localStorage.getItem('monthlyFuelPrices');
-            if (savedMonthly) monthlyFuelPrices = JSON.parse(savedMonthly);
-
-            if (kilometerstand.current > 0) {
-                document.getElementById('currentKm').value = kilometerstand.current;
-            }
-
-            renderTable();
-            renderMonthlyPricesList();
-            updateStatistics();
-            updateMonthlyChart();
-            updatePriceChart();
-            updateProviderStats();
-            updateFuelPriceChart();
-        }
-
-        function createBackup() {
-            const backup = {
-                chargingData,
-                kilometerstand,
-                e10Price,
-                monthlyFuelPrices,
-                backupDate: new Date().toISOString()
-            };
-
-            const dataStr = JSON.stringify(backup, null, 2);
-            const blob = new Blob([dataStr], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `tesla_backup_${new Date().toISOString().split('T')[0]}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-
-        function restoreData(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const backup = JSON.parse(e.target.result);
-
-                    if (confirm('Möchtest du wirklich alle aktuellen Daten mit diesem Backup überschreiben?')) {
-                        chargingData = backup.chargingData || [];
-                        kilometerstand = backup.kilometerstand || { current: 0, first: 0 };
-                        e10Price = backup.e10Price || 1.65;
-                        monthlyFuelPrices = backup.monthlyFuelPrices || {};
-
-                        saveData();
-                        renderTable();
-                        renderMonthlyPricesList();
-                        updateStatistics();
-                        updateMonthlyChart();
-                        updatePriceChart();
-                        updateProviderStats();
-                        updateFuelPriceChart();
-
-                        alert('✅ Backup erfolgreich wiederhergestellt!\n\n' +
-                              'Ladevorgänge: ' + chargingData.length + '\n' +
-                              'Benzinpreise: ' + Object.keys(monthlyFuelPrices).length + ' Monate');
-                    }
-                } catch (error) {
-                    alert('❌ Fehler beim Wiederherstellen: ' + error.message);
-                }
-            };
-
-            reader.readAsText(file);
-            event.target.value = '';
-        }
-
-        loadData();
-    </script>
-</body>
-</html>
+            <button onclick="addChargingSession()">💾 Ladevorgang spe
